@@ -27,8 +27,8 @@ class Mung:
         call_pandas = self.read_extension
         print(call_pandas)
         self.df = call_pandas(self.path + self.file_name)
-        return self.df
         print("File has been loaded to Pandas.")
+        return self.df
 
     # Pandas exploration methods
     def data_info(self):
@@ -38,7 +38,6 @@ class Mung:
         data_nulls = df.isna().sum()
         data_info = df.info(verbose=True)
         data_uniq = df.nunique(axis=0)
-        return df
 
         print('\n First 5 rows:')
         print(data_head)
@@ -50,6 +49,7 @@ class Mung:
         print(data_nulls)
         print('\n Unique values per column:')
         print(data_uniq)
+        return self.df
 
     def clean_nulls(self):
         nonulls = ['Yes', 'yes', 'YES', 'y', 'Y']
@@ -61,5 +61,23 @@ class Mung:
             print(bynulls)
         else:
             print('No rows will be dropped')
+        return df
 
-
+    def drop_cols(self):
+        df = self.df
+        col_lst_to_drop = []
+        no_drop = ['N', 'n', 'none']
+        col_lst = df.columns
+        for col in col_lst:
+            to_drop = input("List columns you'd like to drop one at a time. Input 'N' when done: ")
+            if to_drop in no_drop:
+                break
+            elif to_drop in col_lst:
+                col_lst_to_drop.append(to_drop)
+                continue
+            else:
+                print('Column not in dataframe, please try again.')
+                continue
+        df = df.drop(col_lst_to_drop, axis='columns', inplace=True)
+        print('Done dropping columns')
+        return df
